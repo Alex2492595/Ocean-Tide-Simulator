@@ -17,30 +17,50 @@ public class PlanetaryData {
     private static final double MASS_MOON = 7.35e22; //In kilograms
     private static final double MASS_SUN = 1.99e30; //In kilograms
     
-    private boolean sunEffect; //The Sun's gravitational effect
+    private boolean sunEffectOn; //The Sun's gravitational effect
     private double distanceEarthMoon; //In meters (default)
     private double distanceEarthSun; //In meters (default January 1st)
     private double gravityEarth; //In meters per second^2 (default)
-    private double rotationEarthSun; //In revolutions per minute
-    private double rotationMoonEarth; //In revolutions per minute
-    private double rotationEarthOnAxis; //In revolutions per minute
+    private double rotationEarthSun; //In degrees per day
+    private double rotationMoonEarth; //In degrees per hour
+    private double rotationEarthOnAxis; //In degrees per hour
 
     public PlanetaryData() {
-        this.sunEffect = true;
+        this.sunEffectOn = true;
         this.distanceEarthMoon = 3.84e8;
         this.distanceEarthSun = 1.47e11;
         this.gravityEarth = 9.81;
-        this.rotationEarthSun = 7e-4;
-        this.rotationMoonEarth = 2.5e-5;
-        this.rotationEarthOnAxis = 6.9e-4;
+        this.rotationEarthSun = 360 / 365.25;
+        this.rotationMoonEarth = 360 / 655.2;
+        this.rotationEarthOnAxis = 360 / 24;
+    }
+    
+    /**
+     * Calculates the moon's gravitational force with respect to the Earth
+     * @return the moon's gravitational force
+     */
+    public double calculateMoonForce() {
+        return GRAVITATIONAL_CONSTANT * ((MASS_MOON * MASS_EARTH) / Math.pow(distanceEarthMoon, 2));
+    }
+    
+    /**
+     * Calculates the Sun's gravitational force with respect to the Earth
+     * @return the Sun's gravitational force
+     */
+    public double calculateSunForce() {
+        if (sunEffectOn) {
+            return GRAVITATIONAL_CONSTANT * ((MASS_SUN * MASS_EARTH) / Math.pow(distanceEarthSun, 2));
+        } else {
+            return 0;
+        }
     }
 
-    public boolean isSunEffect() {
-        return sunEffect;
+    public boolean isSunEffectOn() {
+        return sunEffectOn;
     }
 
-    public void setSunEffect(boolean sunEffect) {
-        this.sunEffect = sunEffect;
+    public void setSunEffectOn(boolean sunEffectOn) {
+        this.sunEffectOn = sunEffectOn;
     }
 
     public double getDistanceEarthMoon() {
