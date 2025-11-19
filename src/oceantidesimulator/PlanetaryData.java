@@ -4,6 +4,8 @@
  */
 package oceantidesimulator;
 
+import java.time.Duration;
+
 /**
  * 
  * @author Alexander Nikopoulos
@@ -24,6 +26,7 @@ public class PlanetaryData {
     private double rotationEarthSun; //In degrees per day
     private double rotationMoonEarth; //In degrees per hour
     private double rotationEarthOnAxis; //In degrees per hour
+    private Duration duration; //The time duration for the simulation
 
     public PlanetaryData() {
         this.sunEffectOn = true;
@@ -52,6 +55,25 @@ public class PlanetaryData {
             return GRAVITATIONAL_CONSTANT * ((MASS_SUN * MASS_EARTH) / Math.pow(distanceEarthSun, 2));
         } else {
             return 0;
+        }
+    }
+    
+    /**
+     * Calculates where the Earth, Sun and Moon would be after a duration of time. 
+     */
+    public void changeCelestialBodiesPosition() {
+        double numOfDays = duration.toDays();
+        double numOfHours = duration.toHours();
+        
+        double positionOfMoon = rotationMoonEarth * numOfHours; // The angular displacement of the Moon around the Earth.
+        double positionOfEarth = rotationEarthSun * numOfDays; // The angular displacement of the Earth around the Sun. 
+        
+        while (positionOfMoon >= 360) {// Subtracts 360 degrees when the angular displacement of the Moon when it's greater than 360 degrees.
+            positionOfMoon -= 360;
+        }
+        
+        while (positionOfEarth >= 360) {// Subtracts 360 degrees when the angular displacement of the Earth when it's greater than 360 degrees.
+            positionOfEarth -= 360;
         }
     }
 
