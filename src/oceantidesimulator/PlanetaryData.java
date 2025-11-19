@@ -21,6 +21,8 @@ public class PlanetaryData {
     private double distanceEarthMoon; //In meters (default)
     private double distanceEarthSun; //In meters (default January 1st)
     private double gravityEarth; //In meters per second^2 (default)
+    private double radiusEarth; //In meters
+    private double radiusMoon; //In meters
     private double rotationEarthSun; //In degrees per day
     private double rotationMoonEarth; //In degrees per hour
     private double rotationEarthOnAxis; //In degrees per hour
@@ -30,6 +32,8 @@ public class PlanetaryData {
         this.distanceEarthMoon = 3.84e8;
         this.distanceEarthSun = 1.47e11;
         this.gravityEarth = 9.81;
+        this.radiusEarth = 6.37e6 ;
+        this.radiusMoon = 1.74e6;
         this.rotationEarthSun = 360 / 365.25;
         this.rotationMoonEarth = 360 / 655.2;
         this.rotationEarthOnAxis = 360 / 24;
@@ -110,4 +114,29 @@ public class PlanetaryData {
     public void setRotationEarthOnAxis(double rotationEarthOnAxis) {
         this.rotationEarthOnAxis = rotationEarthOnAxis;
     }
+
+    public double getRadiusEarth() {
+        return radiusEarth;
+    }
+
+    public double getRadiusMoon() {
+        return radiusMoon;
+    }
+
+    public static double getGRAVITATIONAL_CONSTANT() {
+        return GRAVITATIONAL_CONSTANT;
+    }
+
+    public static double getMASS_EARTH() {
+        return MASS_EARTH;
+    }
+
+    public static double getMASS_MOON() {
+        return MASS_MOON;
+    }
+
+    public static double getMASS_SUN() {
+        return MASS_SUN;
+    }
+    
 }
