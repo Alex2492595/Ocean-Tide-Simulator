@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
@@ -87,7 +90,7 @@
                      </font>
                   </Label>
                   <Label fx:id="simulationSpeedLbl" text="1.0x" />
-                  <Slider fx:id="gravitySlider1" blockIncrement="0.1" min="0.1" minorTickCount="5" showTickLabels="true" showTickMarks="true" value="1.0" />
+                  <Slider fx:id="speedSlider" blockIncrement="0.1" min="0.1" minorTickCount="5" showTickLabels="true" showTickMarks="true" value="1.0" />
                </children>
             </VBox>
          </children>
@@ -95,12 +98,23 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </VBox>
-      <HBox layoutX="286.0" layoutY="14.0" prefHeight="600.0" prefWidth="900.0" />
+      <HBox layoutX="286.0" layoutY="14.0" prefHeight="600.0" prefWidth="900.0">
+         <children>
+            <Pane />
+            <LineChart fx:id="tideChart" title="Tide Display">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis label="Height (m)" lowerBound="-18.0" side="LEFT" upperBound="18.0" />
+              </yAxis>
+            </LineChart>
+         </children></HBox>
       <VBox layoutX="600.0" layoutY="637.0" spacing="5.0">
          <children>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Button fx:id="resetBtn" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button fx:id="resetBtn" mnemonicParsing="false" onAction="#onReset" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fx:id="resetIcon" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -108,7 +122,7 @@
                            </image></ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="pauseBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button fx:id="pauseBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onPause" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fx:id="pauseIcon" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -116,7 +130,7 @@
                            </image></ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="playBtn" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button fx:id="playBtn" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" onAction="#onPlay" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fx:id="playIcon" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
