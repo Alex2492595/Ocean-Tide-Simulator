@@ -5,11 +5,18 @@
 
 package Controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 /**
  * 
@@ -19,6 +26,8 @@ import javafx.scene.control.Button;
  */
 public class MenuController implements Initializable {
 
+    private Stage stage;
+    
     @FXML
     private Button startBtn;
 
@@ -28,5 +37,26 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+    }
+    
+    /**
+     * Switches the scene to the simulation once start is pressed
+     * @param event 
+     */
+    @FXML
+    private void switchScene(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Simulation.fxml"));
+            
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

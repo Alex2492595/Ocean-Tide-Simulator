@@ -15,7 +15,7 @@
                   <Font size="36.0" />
                </font>
             </Label>
-            <Button fx:id="startBtn" mnemonicParsing="false" text="Start">
+            <Button fx:id="startBtn" mnemonicParsing="false" onAction="#switchScene" text="Start">
                <font>
                   <Font size="24.0" />
                </font>

@@ -6,6 +6,7 @@
  */
 package Main;
 
+import Controller.MenuController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -30,8 +31,11 @@ public class OceanTideSimulator extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Simulation.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Menu.fxml"));
+        
         Parent root = loader.load();
+        MenuController controller = loader.getController();
+        controller.setStage(stage);
         
         Scene scene = new Scene(root);
         
