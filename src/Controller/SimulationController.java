@@ -59,6 +59,12 @@ public class SimulationController implements Initializable {
     private Button playBtn;
     
     @FXML
+    private ImageView earth;
+    
+    @FXML
+    private ImageView moon;
+    
+    @FXML
     private ImageView resetIcon;
     
     @FXML
@@ -67,6 +73,11 @@ public class SimulationController implements Initializable {
     @FXML
     private ImageView playIcon;
 
+    @FXML
+    private void platButtonPressed() {
+        
+    }
+    
     /**
      * Initializes the controller class.
      */
@@ -75,5 +86,8 @@ public class SimulationController implements Initializable {
         resetIcon.setImage(new Image("file:images/reset.png"));
         pauseIcon.setImage(new Image("file:images/pause.png"));
         playIcon.setImage(new Image("file:images/play.png"));
+        
+        earth.setImage(new Image("file:images/earth.png"));
+        moon.setImage(new Image("file:images/moon.png"));
     }
 }
