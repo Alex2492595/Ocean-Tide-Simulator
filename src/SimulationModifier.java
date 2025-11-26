@@ -15,7 +15,7 @@ import java.time.LocalDate;
  * Team Project - OceanTideSimulator
  * 30/11/2025
  */
-public class SimulationController {
+public class SimulationModifier {
     private double speed; // Speed of the simulation.
     private LocalDate time = LocalDate.now();; 
     private Duration duration; 
@@ -36,4 +36,6 @@ public class SimulationController {
         moonAroundEarthSpeed *= speed; 
         rotationEarthSpeed *= speed;   
     }
+    
+    // TODO: Add factors affecting tide
 }
