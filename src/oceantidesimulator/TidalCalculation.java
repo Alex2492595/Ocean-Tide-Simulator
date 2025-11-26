@@ -54,5 +54,25 @@ public double calculateRuleOfTwelfths(double startHeight, double nextHeight, int
         double change = (range * sumTwelfths) / 12.0;
         return currentStart + change;
     }
+
+// Semidiurnal lunar tide period (hours). Approx 12.42 hours for M2 constituent.
+    public static final double SEMIDIURNAL_PERIOD_HOURS = 12.42;
+
+    /**
+     * Compute tide height (meters) at a given simulation time.
+     *
+     * @param epochSeconds absolute simulation time in seconds (can be simulation time)
+     * @param amplitudeMeters base amplitude for the chosen location (meters)
+     * @param phaseOffsetRadians phase offset (radians) for local phase (depends on longitude/harbour)
+     * @param lunarPhaseFactor multiplier [0.5 - 1.5] to approximate spring/neap.
+     * @return tide height in meters (relative to mean sea level)
+     */
+    public static double computeTide(double epochSeconds, double amplitudeMeters, double phaseOffsetRadians, double lunarPhaseFactor) {
+        double hours = epochSeconds / 3600.0;
+        double omega = 2.0 * Math.PI / SEMIDIURNAL_PERIOD_HOURS;
+        double seaLevel = amplitudeMeters * lunarPhaseFactor * Math.sin(omega * hours + phaseOffsetRadians);
+
+        return seaLevel;
+    }
  }
 
