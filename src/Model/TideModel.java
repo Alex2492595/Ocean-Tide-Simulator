@@ -25,7 +25,7 @@ public class TideModel {
     private final Timeline timeline;
 
     public TideModel() {
-        timeline = new Timeline(new KeyFrame(Duration.millis(100), e -> tick(0.1)));
+        timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick(0.1)));
         timeline.setCycleCount(Animation.INDEFINITE);
     }
 
