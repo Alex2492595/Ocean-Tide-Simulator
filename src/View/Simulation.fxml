@@ -11,10 +11,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SimulationController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.SimulationController">
    <children>
       <VBox alignment="CENTER" spacing="10.0">
          <children>
@@ -98,19 +99,26 @@
       </VBox>
       <HBox layoutX="286.0" layoutY="14.0" prefHeight="600.0" prefWidth="900.0">
          <children>
-            <Pane prefHeight="600.0" prefWidth="450.0">
+            <Pane fx:id="simulPane" prefHeight="600.0" prefWidth="450.0">
                <children>
-                  <ImageView fx:id="earth" fitHeight="150.0" fitWidth="200.0" layoutX="125.0" layoutY="236.0" pickOnBounds="true" preserveRatio="true">
+                  <Rectangle fx:id="clip" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="450.0" />
+                  <ImageView fx:id="earth" fitHeight="106.0" fitWidth="95.0" layoutX="177.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/earth.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="moon" fitHeight="16.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="moon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/moon.png" />
                      </image>
                   </ImageView>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="600.0" stroke="BLACK" strokeType="INSIDE" width="450.0" />
+                  <ImageView fx:id="sun" fitHeight="200.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/sun.png" />
+                     </image>
+                  </ImageView>
+                  <Circle fx:id="moonPath" fill="#1f93ff00" layoutX="225.0" layoutY="287.0" radius="100.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                  <Circle fx:id="sunPath" fill="#1f93ff00" layoutX="228.0" layoutY="282.0" radius="212.0" stroke="TRANSPARENT" strokeType="INSIDE" />
                </children>
             </Pane>
          </children></HBox>
@@ -118,7 +126,7 @@
          <children>
             <HBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Button fx:id="resetBtn" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button fx:id="resetBtn" mnemonicParsing="false" onAction="#resetButtonPressed" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fx:id="resetIcon" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -126,7 +134,7 @@
                            </image></ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="pauseBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button fx:id="pauseBtn" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#pauseButtonPressed" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fx:id="pauseIcon" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -134,7 +142,7 @@
                            </image></ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="playBtn" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                  <Button fx:id="playBtn" layoutX="62.0" layoutY="10.0" mnemonicParsing="false" onAction="#playButtonPressed" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fx:id="playIcon" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
