@@ -118,7 +118,7 @@
                      </image>
                   </ImageView>
                   <Circle fx:id="moonPath" fill="#1f93ff00" layoutX="225.0" layoutY="287.0" radius="100.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-                  <Circle fx:id="sunPath" fill="#1f93ff00" layoutX="228.0" layoutY="282.0" radius="212.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                  <Circle fx:id="sunPath" fill="#1f93ff00" layoutX="225.0" layoutY="287.0" radius="299.0" stroke="TRANSPARENT" strokeType="INSIDE" />
                </children>
             </Pane>
          </children></HBox>
