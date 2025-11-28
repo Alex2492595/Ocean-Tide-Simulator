@@ -89,22 +89,23 @@ public class SimulationController implements Initializable {
         
         waterRect.setHeight(0);
         model = new TideModel();  // create a new model here
-        setModel(model); 
-
-        
+        setModel(model);         
 
     }
     
-     public void setModel(TideModel model) {
+    public void setModel(TideModel model) {
         this.model = model;
 
         model.simulationSpeedProperty().bind(speedSlider.valueProperty());
 
         tideLabel.textProperty().bind(model.currentTideProperty().asString("Current Tide: %.2f m"));
-
+        
         model.currentTideProperty().addListener((obs, oldVal, newVal) -> {
             updateWaterLevel(newVal.doubleValue());
         });
+        updateGravity();
+        updateSpeed();
+        updateDistance();
     }
      
      private void updateWaterLevel(double tideMeters) {
@@ -116,9 +117,27 @@ public class SimulationController implements Initializable {
 
         waterRect.setHeight(newHeight);
         waterRect.setY(0 - newHeight); 
-
     }
-        
+     
+    private void updateGravity() {
+        gravitySlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
+       gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
+    });
+    }
+    
+    private void updateSpeed() {
+        speedSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
+       simulationSpeedLbl.setText(String.format("%.1f", speedSlider.getValue()) + " x");
+    });
+    }
+    
+    private void updateDistance() {
+        distanceEarthMoonSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
+       moonDistanceLbl.setText(String.format("%.1f", distanceEarthMoonSlider.getValue()) + " Km");
+    });
+    }
+       
+    
     @FXML
     private void onPlay() {
         model.start();

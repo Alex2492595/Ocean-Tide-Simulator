@@ -16,16 +16,16 @@ public class TideModel {
 
     private final DoubleProperty currentTide = new SimpleDoubleProperty(0.0);
     private final DoubleProperty simulationTime = new SimpleDoubleProperty(Instant.now().getEpochSecond());
-    private final DoubleProperty simulationSpeed = new SimpleDoubleProperty(3600.0); // seconds simulated per real second
+    private final DoubleProperty simulationSpeed = new SimpleDoubleProperty(360000.0); // seconds simulated per real second
 
-    private final DoubleProperty amplitudeMeters = new SimpleDoubleProperty(1.5); // default amplitude
+    private final DoubleProperty amplitudeMeters = new SimpleDoubleProperty(2); // default amplitude
     private final DoubleProperty phaseOffsetRadians = new SimpleDoubleProperty(0.0);
     private final DoubleProperty lunarPhaseFactor = new SimpleDoubleProperty(1.0);
 
     private final Timeline timeline;
 
     public TideModel() {
-        timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick(0.1)));
+        timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick(2)));
         timeline.setCycleCount(Animation.INDEFINITE);
     }
 
