@@ -5,6 +5,8 @@
 
 package Controller;
 
+import Model.PlanetaryData;
+import Model.TidalCalculation;
 import Model.TideModel;
 import java.net.URL;
 import java.time.Instant;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
@@ -158,8 +161,10 @@ public class SimulationController implements Initializable {
         sunRotate.setInterpolator(Interpolator.LINEAR);
         sunRotate.setCycleCount(Timeline.INDEFINITE);
         
+        PlanetaryData planetaryData = new PlanetaryData();
+        
         waterRect.setHeight(0);
-        model = new TideModel();  // create a new model here
+        model = new TideModel(planetaryData);  // create a new model here
         setModel(model);         
 
     }
@@ -178,6 +183,7 @@ public class SimulationController implements Initializable {
         updateGravity();
         updateSpeed();
         updateDistance();
+        updateSunEffect();
         updateTime();
     }
      
@@ -193,26 +199,51 @@ public class SimulationController implements Initializable {
     }
      
     private void updateGravity() {
-        gravitySlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
+        gravitySlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
             gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
         });
     }
     
     private void updateSpeed() {
-        speedSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
+        speedSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
             simulationSpeedLbl.setText(String.format("%.1f", speedSlider.getValue()) + " x");
         });
     }
     
     private void updateDistance() {
-        distanceEarthMoonSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
+        distanceEarthMoonSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
             moonDistanceLbl.setText(String.format("%.1f", distanceEarthMoonSlider.getValue()) + " Km");
 
-            moonPath.setRadius((newvalue.doubleValue() / 384000) * 100);
-
+            //Updates the tide visually
+            model.getPlanetaryData().setDistanceEarthMoon(distanceEarthMoonSlider.getValue() * 1000);
+            
+            //Updates the moon visually
+            double progress = 0;
+            
+            if (moonRotate.getStatus() == Animation.Status.RUNNING || moonRotate.getStatus() == Animation.Status.PAUSED) {
+                double currentTime = moonRotate.getCurrentTime().toMillis();
+                double totalTime = moonRotate.getCycleDuration().toMillis();
+                
+                progress = currentTime / totalTime;
+            }
+            
             moonRotate.stop();
+            moonPath.setRadius((newValue.doubleValue() / 384000) * 100);
             moonRotate.setPath(moonPath);
+            
+            Duration newTime = moonRotate.getCycleDuration().multiply(progress);
+            moonRotate.jumpTo(newTime);
             moonRotate.play();
+        });
+    }
+    
+    private void updateSunEffect() {
+        sunEffectCB.selectedProperty().addListener((obs, oldValue, newValue) -> {
+            double opacity = newValue ? 1 : 0.25;
+            
+            FadeTransition fade = new FadeTransition(Duration.millis(300), sun);
+            fade.setToValue(opacity);
+            fade.play();
         });
     }
     
