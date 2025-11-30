@@ -1,0 +1,35 @@
+.start-button {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+
+    /* Text outline */
+    -fx-effect: dropshadow( gaussian , black , 4 , 0.5 , 0 , 0 );
+
+    /* Background */
+    -fx-background-color: linear-gradient(#0099ff, #0066cc);
+    -fx-background-radius: 15px;
+    -fx-padding: 20px;
+    -fx-cursor: hand;
+    -fx-border-color: black;
+    -fx-border-width: 3px;
+    -fx-border-radius: 15px;
+}
+
+/* Hover effect */
+.start-button:hover {
+    -fx-background-color: linear-gradient(#33adff, #0077e6);
+}
+
+/* Pressed effect */
+.start-button:pressed {
+    -fx-background-color: linear-gradient(#005c99, #004c80);
+    -fx-effect: dropshadow( gaussian , black , 2 , 0.3 , 0 , 0 );
+}
+
+.hbox-border {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}

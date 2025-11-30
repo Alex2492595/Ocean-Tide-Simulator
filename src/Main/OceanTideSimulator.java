@@ -38,9 +38,10 @@ public class OceanTideSimulator extends Application {
         controller.setStage(stage);
         
         Scene scene = new Scene(root);
-        
+        scene.getStylesheets().add(getClass().getResource("/Resources/Style.css").toExternalForm());
         stage.setTitle("Ocean Tide Simulator");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 }

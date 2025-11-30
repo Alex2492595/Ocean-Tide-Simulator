@@ -115,6 +115,7 @@ public class SimulationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         resetIcon.setImage(new Image("file:images/reset.png"));
         pauseIcon.setImage(new Image("file:images/pause.png"));
         playIcon.setImage(new Image("file:images/play.png"));

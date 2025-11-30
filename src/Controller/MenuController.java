@@ -16,6 +16,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
@@ -30,13 +32,16 @@ public class MenuController implements Initializable {
     
     @FXML
     private Button startBtn;
+    
+    @FXML
+    private ImageView logoIcon;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        logoIcon.setImage(new Image("file:images/logo.png"));
     }
     
     /**
