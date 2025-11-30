@@ -9,6 +9,10 @@ import Model.TideModel;
 import java.net.URL;
 import java.time.Instant;
 import java.util.ResourceBundle;
+import javafx.animation.Interpolator;
+import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,11 +22,14 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 /**
  * 
- * @author Alexander Nikopoulos
+ * @author Alexander Nikopoulos, Mihir Patel, Nelson Pham
  * Team Project - OceanTideSimulator
  * 30/11/2025
  */
@@ -62,6 +69,21 @@ public class SimulationController implements Initializable {
     private Button playBtn;
     
     @FXML
+    private Pane simulPane;
+    
+    @FXML
+    private Rectangle clip; 
+    
+    @FXML
+    private ImageView earth;
+    
+    @FXML
+    private ImageView moon;
+    
+    @FXML
+    private ImageView sun;
+    
+    @FXML
     private ImageView resetIcon;
     
     @FXML
@@ -75,8 +97,18 @@ public class SimulationController implements Initializable {
     
     @FXML 
     private Label tideLabel;
-
+    
+    @FXML
+    private Circle moonPath; // The circular path of the moon.
+    
+    @FXML
+    private Circle sunPath; // The "path" of the Sun, since the Earth will be still in the simulation. 
+    
     private TideModel model;
+    
+    private RotateTransition earthRotate;
+    private PathTransition moonRotate;
+    private PathTransition sunRotate; // The "circular path" of the Sun.
     
     /**
      * Initializes the controller class.
@@ -86,6 +118,41 @@ public class SimulationController implements Initializable {
         resetIcon.setImage(new Image("file:images/reset.png"));
         pauseIcon.setImage(new Image("file:images/pause.png"));
         playIcon.setImage(new Image("file:images/play.png"));
+        
+        earth.setImage(new Image("file:images/earth.png"));
+        moon.setImage(new Image("file:images/moon.png"));
+        sun.setImage(new Image("file:images/sun.png"));
+        
+        clip = new Rectangle();
+        clip.widthProperty().bind(simulPane.widthProperty());
+        clip.heightProperty().bind(simulPane.heightProperty());
+        
+        simulPane.setClip(clip); // Clips off parts of the Sun that go outside of the simulPane.
+        
+        earthRotate = new RotateTransition(Duration.seconds(1), earth); // The Earth will rotate once per day per second.
+        moonRotate = new PathTransition();
+        sunRotate = new PathTransition();
+        
+        earthRotate.setByAngle(360);
+        earthRotate.setRate(-1); 
+        earthRotate.setInterpolator(Interpolator.LINEAR);
+        earthRotate.setCycleCount(Timeline.INDEFINITE);
+        
+        moonRotate.setDuration(Duration.seconds(27.3)); // the Earth has to rotate 27.3 times for the Moon to revolve once.  
+        moonRotate.setPath(moonPath);
+        moonRotate.setNode(moon);
+        moonRotate.setRate(-1);
+        moonRotate.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+        moonRotate.setInterpolator(Interpolator.LINEAR);
+        moonRotate.setCycleCount(Timeline.INDEFINITE);
+        
+        sunRotate.setDuration(Duration.seconds(365.25)); // the Earth has to rotate 27.3 times for the Moon to revolve once.  
+        sunRotate.setPath(sunPath);
+        sunRotate.setNode(sun);
+        sunRotate.setRate(-1); // Sets the Sun rotating counterclock-wise.
+        sunRotate.setOrientation(PathTransition.OrientationType.NONE);
+        sunRotate.setInterpolator(Interpolator.LINEAR);
+        sunRotate.setCycleCount(Timeline.INDEFINITE);
         
         waterRect.setHeight(0);
         model = new TideModel();  // create a new model here
@@ -141,6 +208,11 @@ public class SimulationController implements Initializable {
     @FXML
     private void onPlay() {
         model.start();
+        
+        earthRotate.play();
+        moonRotate.play();
+        sunRotate.play();
+        
         playBtn.setDisable(true);
         pauseBtn.setDisable(false);
     }
@@ -148,6 +220,11 @@ public class SimulationController implements Initializable {
     @FXML
     private void onPause() {
         model.pause();
+        
+        earthRotate.pause();
+        moonRotate.pause();
+        sunRotate.pause();
+        
         playBtn.setDisable(false);
         pauseBtn.setDisable(true);
     }
@@ -156,7 +233,19 @@ public class SimulationController implements Initializable {
     private void onReset() {
         model.pause();
         model.simulationTimeProperty().set(Instant.now().getEpochSecond());
+        
+        earthRotate.stop();
+        moonRotate.stop();
+        sunRotate.stop();
+        
+        earth.setRotate(0);
+        moon.setTranslateX(0);
+        moon.setTranslateY(0);
+        
+        sun.setTranslateX(0);
+        sun.setTranslateY(0);
+        
         playBtn.setDisable(false);
         pauseBtn.setDisable(true);
      }
-     }
+}
