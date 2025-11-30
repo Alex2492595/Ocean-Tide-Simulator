@@ -8,8 +8,12 @@ package Controller;
 import Model.TideModel;
 import java.net.URL;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.animation.Animation;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
@@ -170,9 +174,11 @@ public class SimulationController implements Initializable {
         model.currentTideProperty().addListener((obs, oldVal, newVal) -> {
             updateWaterLevel(newVal.doubleValue());
         });
+        
         updateGravity();
         updateSpeed();
         updateDistance();
+        updateTime();
     }
      
      private void updateWaterLevel(double tideMeters) {
@@ -188,20 +194,38 @@ public class SimulationController implements Initializable {
      
     private void updateGravity() {
         gravitySlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
-       gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
-    });
+            gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
+        });
     }
     
     private void updateSpeed() {
         speedSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
-       simulationSpeedLbl.setText(String.format("%.1f", speedSlider.getValue()) + " x");
-    });
+            simulationSpeedLbl.setText(String.format("%.1f", speedSlider.getValue()) + " x");
+        });
     }
     
     private void updateDistance() {
         distanceEarthMoonSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
-       moonDistanceLbl.setText(String.format("%.1f", distanceEarthMoonSlider.getValue()) + " Km");
-    });
+            moonDistanceLbl.setText(String.format("%.1f", distanceEarthMoonSlider.getValue()) + " Km");
+
+            moonPath.setRadius((newvalue.doubleValue() / 384000) * 100);
+
+            moonRotate.stop();
+            moonRotate.setPath(moonPath);
+            moonRotate.play();
+        });
+    }
+    
+    private void updateTime() {
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> {
+                LocalDateTime now = LocalDateTime.now();
+                dateAndTimeTF.setText(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            })
+        );
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
        
     
