@@ -66,9 +66,6 @@ public class SimulationController implements Initializable {
     private Slider speedSlider;
     
     @FXML
-    private Button resetBtn;
-    
-    @FXML
     private Button pauseBtn;
     
     @FXML
@@ -105,23 +102,23 @@ public class SimulationController implements Initializable {
     private Label tideLabel;
     
     @FXML
-    private Circle moonPath; // The circular path of the moon.
+    private Circle moonPath; //The circular path of the moon.
     
     @FXML
-    private Circle sunPath; // The "path" of the Sun, since the Earth will be still in the simulation. 
+    private Circle sunPath; //The "path" of the Sun, since the Earth will be still in the simulation.
     
     private TideModel model;
     
     private RotateTransition earthRotate;
     private PathTransition moonRotate;
-    private PathTransition sunRotate; // The "circular path" of the Sun.
+    private PathTransition sunRotate; //The "circular path" of the Sun.
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        //Sets the images needed in the simulation
         resetIcon.setImage(new Image("file:images/reset.png"));
         pauseIcon.setImage(new Image("file:images/pause.png"));
         playIcon.setImage(new Image("file:images/play.png"));
@@ -134,9 +131,9 @@ public class SimulationController implements Initializable {
         clip.widthProperty().bind(simulPane.widthProperty());
         clip.heightProperty().bind(simulPane.heightProperty());
         
-        simulPane.setClip(clip); // Clips off parts of the Sun that go outside of the simulPane.
+        simulPane.setClip(clip); //Clips off parts of the Sun that go outside of the simulPane.
         
-        earthRotate = new RotateTransition(Duration.seconds(1), earth); // The Earth will rotate once per day per second.
+        earthRotate = new RotateTransition(Duration.seconds(1), earth); //The Earth will rotate once per day per second.
         moonRotate = new PathTransition();
         sunRotate = new PathTransition();
         
@@ -145,7 +142,7 @@ public class SimulationController implements Initializable {
         earthRotate.setInterpolator(Interpolator.LINEAR);
         earthRotate.setCycleCount(Timeline.INDEFINITE);
         
-        moonRotate.setDuration(Duration.seconds(27.3)); // the Moon will rotate around the Earth in 27.3 days (655.2 hours / (24 hours / day)). 
+        moonRotate.setDuration(Duration.seconds(27.3)); //The Moon will rotate around the Earth in 27.3 days (655.2 hours / (24 hours / day)). 
         moonRotate.setPath(moonPath);
         moonRotate.setNode(moon);
         moonRotate.setRate(-1);
@@ -153,29 +150,31 @@ public class SimulationController implements Initializable {
         moonRotate.setInterpolator(Interpolator.LINEAR);
         moonRotate.setCycleCount(Timeline.INDEFINITE);
         
-        sunRotate.setDuration(Duration.seconds(365.25)); // the Earth will rotate around the Sun in 365.25 days.  
+        sunRotate.setDuration(Duration.seconds(365.25)); //The Earth will rotate around the Sun in 365.25 days.  
         sunRotate.setPath(sunPath);
         sunRotate.setNode(sun);
-        sunRotate.setRate(-1); // Sets the Sun rotating counterclock-wise.
+        sunRotate.setRate(-1);
         sunRotate.setOrientation(PathTransition.OrientationType.NONE);
         sunRotate.setInterpolator(Interpolator.LINEAR);
         sunRotate.setCycleCount(Timeline.INDEFINITE);
         
         PlanetaryData planetaryData = new PlanetaryData();
         
+        //Creates the tide model
         waterRect.setHeight(0);
-        model = new TideModel(planetaryData);  // create a new model here
+        model = new TideModel(planetaryData);
         setModel(model);         
 
+        //How speed will impact the celestial bodies
         speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             double speed = newVal.doubleValue();
-
-            // The original rates were all negative at the start.
+            
             earthRotate.setRate(-speed);
             moonRotate.setRate(-speed);
             sunRotate.setRate(-speed);
         });
         
+        //Sets the format and updates the date and time
         model.simulationTimeProperty().addListener((obs, oldValue, newValue) -> {
             long epochSeconds = newValue.longValue();
             LocalDateTime simDateTime = LocalDateTime.ofEpochSecond(epochSeconds, 0, ZoneOffset.UTC);
@@ -184,6 +183,10 @@ public class SimulationController implements Initializable {
         });
     }
     
+    /**
+     * Sets the current tide and updates it according to user-set values
+     * @param model the tide model
+     */
     public void setModel(TideModel model) {
         this.model = model;
 
@@ -191,17 +194,23 @@ public class SimulationController implements Initializable {
 
         tideLabel.textProperty().bind(model.currentTideProperty().asString("Current Tide: %.2f m"));
         
+        //The current tide level is updated
         model.currentTideProperty().addListener((obs, oldVal, newVal) -> {
             updateWaterLevel(newVal.doubleValue());
         });
         
+        //Updates of user-set values
         updateGravity();
         updateSpeed();
         updateDistance();
         updateSunEffect();
     }
-     
-     private void updateWaterLevel(double tideMeters) {
+    
+    /**
+     * Updates the water level of the tide
+     * @param tideMeters the tide level in meters
+     */
+    private void updateWaterLevel(double tideMeters) {
         double min = -2;
         double max =  2;
         double maxHeight = 500; 
@@ -211,7 +220,8 @@ public class SimulationController implements Initializable {
         waterRect.setHeight(newHeight);
         waterRect.setY(0 - newHeight); 
     }
-     
+    
+    //Updates the gravity and how it affects the tide
     private void updateGravity() {
         gravitySlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
             gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
@@ -220,12 +230,14 @@ public class SimulationController implements Initializable {
         });
     }
     
+    //Updates the speed of the simulation
     private void updateSpeed() {
         speedSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
             simulationSpeedLbl.setText(String.format("%.2f", speedSlider.getValue()) + " x");
         });
     }
     
+    //Updates the earth-moon distance and how it affects the tide
     private void updateDistance() {
         distanceEarthMoonSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
             moonDistanceLbl.setText(String.format("%.0f", distanceEarthMoonSlider.getValue()) + " Km");
@@ -253,6 +265,7 @@ public class SimulationController implements Initializable {
         });
     }
     
+    //Updates the effect of the Sun on the tide
     private void updateSunEffect() {
         sunEffectCB.selectedProperty().addListener((obs, oldValue, newValue) -> {
             model.getPlanetaryData().setSunEffectOn(newValue);
@@ -265,6 +278,7 @@ public class SimulationController implements Initializable {
         });
     }
     
+    //When play button is pressed
     @FXML
     private void onPlay() {
         model.start();
@@ -277,6 +291,7 @@ public class SimulationController implements Initializable {
         pauseBtn.setDisable(false);
     }
 
+    //When pause button is pressed
     @FXML
     private void onPause() {
         model.pause();
@@ -289,6 +304,7 @@ public class SimulationController implements Initializable {
         pauseBtn.setDisable(true);
     }
 
+    //When reset button is pressed
     @FXML
     private void onReset() {
         model.pause();

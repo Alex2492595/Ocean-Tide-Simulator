@@ -3,11 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
+
 import java.time.Duration;
 
 /**
  * 
- * @author Alexander Nikopoulos
+ * @author Alexander Nikopoulos, Mihir Patel
  * Team Project - OceanTideSimulator
  * 30/11/2025
  */
@@ -61,25 +62,24 @@ public class PlanetaryData {
         }
     }
     
-    /**
-     * Calculates where the Earth, Sun and Moon would be after a duration of time. 
-     */
+    //Calculates where the Earth, Sun, and Moon would be after a duration of time.
     public void changeCelestialBodiesPosition() {
         double numOfDays = duration.toDays();
         double numOfHours = duration.toHours();
         
-        double positionOfMoon = rotationMoonEarth * numOfHours; // The angular displacement of the Moon around the Earth.
-        double positionOfEarth = rotationEarthSun * numOfDays; // The angular displacement of the Earth around the Sun. 
+        double positionOfMoon = rotationMoonEarth * numOfHours; //The angular displacement of the Moon around the Earth.
+        double positionOfEarth = rotationEarthSun * numOfDays; //The angular displacement of the Earth around the Sun. 
         
-        while (positionOfMoon >= 360) {// Subtracts 360 degrees when the angular displacement of the Moon when it's greater than 360 degrees.
+        while (positionOfMoon >= 360) { //Subtracts 360 degrees when the angular displacement of the Moon when it's greater than 360 degrees.
             positionOfMoon -= 360;
         }
         
-        while (positionOfEarth >= 360) {// Subtracts 360 degrees when the angular displacement of the Earth when it's greater than 360 degrees.
+        while (positionOfEarth >= 360) { //Subtracts 360 degrees when the angular displacement of the Earth when it's greater than 360 degrees.
             positionOfEarth -= 360;
         }
     }
 
+    //If the Sun's effect is turned on or not
     public boolean isSunEffectOn() {
         return sunEffectOn;
     }
@@ -159,5 +159,4 @@ public class PlanetaryData {
     public static double getMASS_SUN() {
         return MASS_SUN;
     }
-    
 }
