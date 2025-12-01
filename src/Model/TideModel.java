@@ -17,8 +17,8 @@ public class TideModel {
     private final PlanetaryData planetaryData;
     
     private final DoubleProperty currentTide = new SimpleDoubleProperty(0.0);
-    private final DoubleProperty simulationTime = new SimpleDoubleProperty(Instant.now().getEpochSecond());
-    private final DoubleProperty simulationSpeed = new SimpleDoubleProperty(360000.0); // seconds simulated per real second
+    private final DoubleProperty simulationTime = new SimpleDoubleProperty(Instant.parse("2025-01-01T00:00:00Z").getEpochSecond());
+    private final DoubleProperty simulationSpeed = new SimpleDoubleProperty(1.0); // seconds simulated per real second
 
     private final DoubleProperty amplitudeMeters = new SimpleDoubleProperty(2); // default amplitude
     private final DoubleProperty phaseOffsetRadians = new SimpleDoubleProperty(0.0);
@@ -28,7 +28,7 @@ public class TideModel {
 
     public TideModel(PlanetaryData planetaryData) {
         this.planetaryData = planetaryData;
-        timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick(2)));
+        timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick(864)));
         timeline.setCycleCount(Animation.INDEFINITE);
     }
 
@@ -39,9 +39,7 @@ public class TideModel {
         simulationTime.set(newSimTime);
         
         TidalCalculation tidalCalculation = new TidalCalculation(planetaryData);
-
         double sunFactor = planetaryData.isSunEffectOn() ? 0.45 : 0;
-        
         double totalAmplitude = tidalCalculation.calculateTidalHeight() * (1 + sunFactor);
         
         double tide = TidalCalculation.computeTide(

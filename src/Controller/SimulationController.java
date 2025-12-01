@@ -6,17 +6,16 @@
 package Controller;
 
 import Model.PlanetaryData;
-import Model.TidalCalculation;
 import Model.TideModel;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
@@ -172,9 +171,16 @@ public class SimulationController implements Initializable {
             double speed = newVal.doubleValue();
 
             // The original rates were all negative at the start.
-            earthRotate.setRate(-speed); 
+            earthRotate.setRate(-speed);
             moonRotate.setRate(-speed);
             sunRotate.setRate(-speed);
+        });
+        
+        model.simulationTimeProperty().addListener((obs, oldValue, newValue) -> {
+            long epochSeconds = newValue.longValue();
+            LocalDateTime simDateTime = LocalDateTime.ofEpochSecond(epochSeconds, 0, ZoneOffset.UTC);
+
+            dateAndTimeTF.setText(simDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         });
     }
     
@@ -193,7 +199,6 @@ public class SimulationController implements Initializable {
         updateSpeed();
         updateDistance();
         updateSunEffect();
-        updateTime();
     }
      
      private void updateWaterLevel(double tideMeters) {
@@ -217,13 +222,13 @@ public class SimulationController implements Initializable {
     
     private void updateSpeed() {
         speedSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
-            simulationSpeedLbl.setText(String.format("%.1f", speedSlider.getValue()) + " x");
+            simulationSpeedLbl.setText(String.format("%.2f", speedSlider.getValue()) + " x");
         });
     }
     
     private void updateDistance() {
         distanceEarthMoonSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
-            moonDistanceLbl.setText(String.format("%.1f", distanceEarthMoonSlider.getValue()) + " Km");
+            moonDistanceLbl.setText(String.format("%.0f", distanceEarthMoonSlider.getValue()) + " Km");
 
             //Updates the tide visually
             model.getPlanetaryData().setDistanceEarthMoon(distanceEarthMoonSlider.getValue() * 1000);
@@ -260,19 +265,6 @@ public class SimulationController implements Initializable {
         });
     }
     
-    private void updateTime() {
-        Timeline timeline = new Timeline(
-            new KeyFrame(Duration.seconds(1), e -> {
-                LocalDateTime now = LocalDateTime.now();
-                dateAndTimeTF.setText(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            })
-        );
-
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-    }
-       
-    
     @FXML
     private void onPlay() {
         model.start();
@@ -300,11 +292,7 @@ public class SimulationController implements Initializable {
     @FXML
     private void onReset() {
         model.pause();
-        model.simulationTimeProperty().set(Instant.now().getEpochSecond());
-        
-        earthRotate.stop();
-        moonRotate.stop();
-        sunRotate.stop();
+        model.simulationTimeProperty().set(Instant.parse("2025-01-01T00:00:00Z").getEpochSecond());
         
         earth.setRotate(0);
         moon.setTranslateX(0);
@@ -320,5 +308,9 @@ public class SimulationController implements Initializable {
         sunEffectCB.setSelected(true);
         gravitySlider.setValue(9.81);
         speedSlider.setValue(1.0);
+        
+        earthRotate.stop();
+        moonRotate.stop();
+        sunRotate.stop();
      }
 }
