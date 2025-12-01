@@ -41,7 +41,7 @@ public class MenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        logoIcon.setImage(new Image("file:images/logo.png"));
+        logoIcon.setImage(new Image("file:images/logo1.png"));
     }
     
     /**

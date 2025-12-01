@@ -1,0 +1,129 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
+ */
+package Model;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ *
+ * @author nelso
+ */
+public class TidalCalculationTest {
+    
+    public TidalCalculationTest() {
+    }
+    
+    @BeforeAll
+    public static void setUpClass() {
+    }
+    
+    @AfterAll
+    public static void tearDownClass() {
+    }
+    
+    @BeforeEach
+    public void setUp() {
+    }
+    
+    @AfterEach
+    public void tearDown() {
+    }
+
+    /**
+     * Test of calculateTidalForce method, of class TidalCalculation.
+     */
+    @Test
+    public void testCalculateTidalForce() {
+        System.out.println("calculateTidalForce");
+        TidalCalculation instance = null;
+        double expResult = 0.0;
+        double result = instance.calculateTidalForce();
+        assertEquals(expResult, result, 0);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of calculateTidalHeight method, of class TidalCalculation.
+     */
+    @Test
+    public void testCalculateTidalHeight() {
+        System.out.println("calculateTidalHeight");
+        TidalCalculation instance = null;
+        double expResult = 0.0;
+        double result = instance.calculateTidalHeight();
+        assertEquals(expResult, result, 0);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of calculateRuleOfTwelfths method, of class TidalCalculation.
+     */
+    @Test
+    public void testCalculateRuleOfTwelfths() {
+        System.out.println("calculateRuleOfTwelfths");
+        double startHeight = 0.0;
+        double nextHeight = 0.0;
+        int hour = 0;
+        TidalCalculation instance = null;
+        double expResult = 0.0;
+        double result = instance.calculateRuleOfTwelfths(startHeight, nextHeight, hour);
+        assertEquals(expResult, result, 0);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+     /**
+     * Test of computeTide method with 0, of class TidalCalculation.
+     */
+    @Test
+    public void testComputeTideZero() {
+        System.out.println("computeTide");
+        double epochSeconds = 0.0;
+        double amplitudeMeters = 0.0;
+        double phaseOffsetRadians = 0.0;
+        double lunarPhaseFactor = 0.0;
+        double expResult = 0.0;
+        double result = TidalCalculation.computeTide(epochSeconds, amplitudeMeters, phaseOffsetRadians, lunarPhaseFactor);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of computeTide method with regular numbers, of class TidalCalculation.
+     */
+    @Test
+    public void testComputeTide1() {
+        System.out.println("computeTide");
+        double epochSeconds = 100.0;
+        double amplitudeMeters = 2.0;
+        double phaseOffsetRadians = 1.0;
+        double lunarPhaseFactor = 1.0;
+        double expResult = 1.697960576;
+        double result = TidalCalculation.computeTide(epochSeconds, amplitudeMeters, phaseOffsetRadians, lunarPhaseFactor);
+        assertEquals(expResult, result);
+    }
+    
+        /**
+     * Test of computeTide method with regular numbers, of class TidalCalculation.
+     */
+    @Test
+    public void testComputeTide2() {
+        System.out.println("computeTide");
+        double epochSeconds = 3600.0;
+        double amplitudeMeters = 4.0;
+        double phaseOffsetRadians = 0.0;
+        double lunarPhaseFactor = 2.0;
+        double expResult = 3.876706984;
+        double result = TidalCalculation.computeTide(epochSeconds, amplitudeMeters, phaseOffsetRadians, lunarPhaseFactor);
+        assertEquals(expResult, result);
+    }
+    
+}

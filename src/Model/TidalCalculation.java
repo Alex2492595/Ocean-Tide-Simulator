@@ -74,7 +74,7 @@ public double calculateRuleOfTwelfths(double startHeight, double nextHeight, int
      * @return tide height in meters (relative to mean sea level)
      */
     public static double computeTide(double epochSeconds, double amplitudeMeters, double phaseOffsetRadians, double lunarPhaseFactor) {
-        double hours = epochSeconds / 3600.0;
+        double hours = epochSeconds/3600 ;
         double omega = 2.0 * Math.PI / SEMIDIURNAL_PERIOD_HOURS;
         double seaLevel = amplitudeMeters * lunarPhaseFactor * Math.sin(omega * hours + phaseOffsetRadians);
 
