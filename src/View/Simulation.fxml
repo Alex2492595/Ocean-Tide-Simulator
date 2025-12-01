@@ -125,12 +125,12 @@
                         <Image url="@../../images/earth.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="moon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="moon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" x="325.0" y="287.0">
                      <image>
                         <Image url="@../../images/moon.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="sun" fitHeight="200.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="sun" fitHeight="188.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true" x="430.0" y="193.0">
                      <image>
                         <Image url="@../../images/sun.png" />
                      </image>

@@ -139,7 +139,7 @@ public class SimulationController implements Initializable {
         earthRotate.setInterpolator(Interpolator.LINEAR);
         earthRotate.setCycleCount(Timeline.INDEFINITE);
         
-        moonRotate.setDuration(Duration.seconds(27.3)); // the Earth has to rotate 27.3 times for the Moon to revolve once.  
+        moonRotate.setDuration(Duration.seconds(27.3)); // the Moon will rotate around the Earth in 27.3 days (655.2 hours / (24 hours / day)). 
         moonRotate.setPath(moonPath);
         moonRotate.setNode(moon);
         moonRotate.setRate(-1);
@@ -147,7 +147,7 @@ public class SimulationController implements Initializable {
         moonRotate.setInterpolator(Interpolator.LINEAR);
         moonRotate.setCycleCount(Timeline.INDEFINITE);
         
-        sunRotate.setDuration(Duration.seconds(365.25)); // the Earth has to rotate 27.3 times for the Moon to revolve once.  
+        sunRotate.setDuration(Duration.seconds(365.25)); // the Earth will rotate around the Sun in 365.25 days.  
         sunRotate.setPath(sunPath);
         sunRotate.setNode(sun);
         sunRotate.setRate(-1); // Sets the Sun rotating counterclock-wise.
@@ -159,6 +159,14 @@ public class SimulationController implements Initializable {
         model = new TideModel();  // create a new model here
         setModel(model);         
 
+        speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            double speed = newVal.doubleValue();
+
+            // The original rates were all negative at the start.
+            earthRotate.setRate(-speed); 
+            moonRotate.setRate(-speed);
+            sunRotate.setRate(-speed);
+        });
     }
     
     public void setModel(TideModel model) {
@@ -248,5 +256,10 @@ public class SimulationController implements Initializable {
         
         playBtn.setDisable(false);
         pauseBtn.setDisable(true);
+        
+        distanceEarthMoonSlider.setValue(384000);
+        sunEffectCB.setSelected(true);
+        gravitySlider.setValue(9.81);
+        speedSlider.setValue(1.0);
      }
 }
