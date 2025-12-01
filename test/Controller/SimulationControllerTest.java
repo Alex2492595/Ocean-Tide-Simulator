@@ -4,38 +4,49 @@
  */
 package Controller;
 
+import Model.PlanetaryData;
 import Model.TideModel;
-import java.net.URL;
-import java.util.ResourceBundle;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 /**
  *
- * @author nelso
+ * @author Nelson Pham
+ * Team Project - OceanTideSimulator
+ * 30/11/2025
  */
 public class SimulationControllerTest {
     
-    public SimulationControllerTest() {
+    @Test
+    public void testUpdateDistanceUpdatesModel() {
+        PlanetaryData planetaryData = new PlanetaryData();
+        TideModel model = new TideModel(planetaryData);
+
+        double newDistance = 400000; //In km
+        planetaryData.setDistanceEarthMoon(newDistance * 1000); //In meters
+
+        assertEquals(400000000.0, planetaryData.getDistanceEarthMoon(), 0.1);
     }
 
-    /**
-     * Test of initialize method, of class SimulationController.
-     */
     @Test
-    public void testInitialize() {
-        System.out.println("initialize");
-        URL url = null;
-        ResourceBundle rb = null;
-        SimulationController instance = new SimulationController();
-        instance.initialize(url, rb);
+    public void testUpdateGravityUpdatesModel() {
+        PlanetaryData planetaryData = new PlanetaryData();
+        TideModel model = new TideModel(planetaryData);
+
+        planetaryData.setGravityEarth(10.5);
+
+        assertEquals(10.5, planetaryData.getGravityEarth(), 0.001);
     }
 
-    /**
-     * Test of setModel method, of class SimulationController.
-     */
     @Test
-    public void testSetModel() {
-        System.out.println("setModel");
-        TideModel model = null;
+    public void testSunEffectUpdatesModel() {
+        PlanetaryData planetaryData = new PlanetaryData();
+        TideModel model = new TideModel(planetaryData);
+
+        planetaryData.setSunEffectOn(false);
+        assertFalse(planetaryData.isSunEffectOn());
+
+        planetaryData.setSunEffectOn(true);
+        assertTrue(planetaryData.isSunEffectOn());
     }
 }

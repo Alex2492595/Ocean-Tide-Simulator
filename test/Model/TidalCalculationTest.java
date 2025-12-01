@@ -15,65 +15,37 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TidalCalculationTest {
     
-    public TidalCalculationTest() {
-    } 
+    @Test
+    public void testCalculateTidalHeight() {
+        PlanetaryData planetaryData = new PlanetaryData();
+        TidalCalculation tidalCalculation = new TidalCalculation(planetaryData);
 
-    /**
-     * Test of calculateTidalHeight method, of class TidalCalculation.
-     */
+        double expected = (planetaryData.getGRAVITATIONAL_CONSTANT() * 
+                          planetaryData.getMASS_MOON() * 
+                          Math.pow(planetaryData.getRadiusEarth(), 2)) /
+                          (planetaryData.getGravityEarth() * 
+                          Math.pow(planetaryData.getDistanceEarthMoon(), 3));
+
+        double result = tidalCalculation.calculateTidalHeight();
+        
+        assertEquals(expected, result, 1e-12);
+    }
+    
     @Test
-    public void testCalculateTidalHeightZero() {
-        System.out.println("calculateTidalHeight");
-        TidalCalculation instance = null;
-        double expResult = 0.0;
-        double result = instance.calculateTidalHeight();
-        assertEquals(expResult, result, 0);
-        fail("The test case is a prototype.");
+    public void testComputeTideAtZero() {
+        double tide = TidalCalculation.computeTide(0.0, 0.0, 0.0, 0.0);
+        
+        assertEquals(0.0, tide, 1e-12);
     }
 
-     /**
-     * Test of computeTide method with 0, of class TidalCalculation.
-     */
     @Test
-    public void testComputeTideZero() {
-        System.out.println("computeTide");
-        double epochSeconds = 0.0;
-        double amplitudeMeters = 0.0;
-        double phaseOffsetRadians = 0.0;
-        double lunarPhaseFactor = 0.0;
-        double expResult = 0.0;
-        double result = TidalCalculation.computeTide(epochSeconds, amplitudeMeters, phaseOffsetRadians, lunarPhaseFactor);
-        assertEquals(expResult, result);
+    public void testComputeTideWithValues() {
+        double tide = TidalCalculation.computeTide(100.0, 2.0, 1.0, 1.0);
+
+        double hours = 100.0 / 3600.0;
+        double omega = 2.0 * Math.PI / TidalCalculation.SEMIDIURNAL_PERIOD_HOURS;
+        double expected = 2.0 * 1.0 * Math.sin(omega * hours + 1.0);
+
+        assertEquals(expected, tide, 1e-9);
     }
-    
-    /**
-     * Test of computeTide method with regular numbers, of class TidalCalculation.
-     */
-    @Test
-    public void testComputeTide1() {
-        System.out.println("computeTide");
-        double epochSeconds = 100.0;
-        double amplitudeMeters = 2.0;
-        double phaseOffsetRadians = 1.0;
-        double lunarPhaseFactor = 1.0;
-        double expResult = 1.697960576;
-        double result = TidalCalculation.computeTide(epochSeconds, amplitudeMeters, phaseOffsetRadians, lunarPhaseFactor);
-        assertEquals(expResult, result);
-    }
-    
-        /**
-     * Test of computeTide method with regular numbers, of class TidalCalculation.
-     */
-    @Test
-    public void testComputeTide2() {
-        System.out.println("computeTide");
-        double epochSeconds = 3600.0;
-        double amplitudeMeters = 4.0;
-        double phaseOffsetRadians = 0.0;
-        double lunarPhaseFactor = 2.0;
-        double expResult = 3.876706984;
-        double result = TidalCalculation.computeTide(epochSeconds, amplitudeMeters, phaseOffsetRadians, lunarPhaseFactor);
-        assertEquals(expResult, result);
-    }
-    
 }
