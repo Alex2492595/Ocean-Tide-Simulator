@@ -38,14 +38,19 @@ public class TideModel {
         double newSimTime = simulationTime.get() + simSecondsAdvance;
         simulationTime.set(newSimTime);
         
-        TidalCalculation tidalCalculation = new TidalCalculation();
+        TidalCalculation tidalCalculation = new TidalCalculation(planetaryData);
 
+        double sunFactor = planetaryData.isSunEffectOn() ? 0.45 : 0;
+        
+        double totalAmplitude = tidalCalculation.calculateTidalHeight() * (1 + sunFactor);
+        
         double tide = TidalCalculation.computeTide(
                 newSimTime,
-                tidalCalculation.calculateTidalHeight(),
+                totalAmplitude,
                 phaseOffsetRadians.get(),
                 lunarPhaseFactor.get()
         );
+        
         currentTide.set(tide);
     }
 

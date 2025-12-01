@@ -201,6 +201,8 @@ public class SimulationController implements Initializable {
     private void updateGravity() {
         gravitySlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
             gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
+            
+            model.getPlanetaryData().setGravityEarth(gravitySlider.getValue());
         });
     }
     
@@ -239,6 +241,8 @@ public class SimulationController implements Initializable {
     
     private void updateSunEffect() {
         sunEffectCB.selectedProperty().addListener((obs, oldValue, newValue) -> {
+            model.getPlanetaryData().setSunEffectOn(newValue);
+            
             double opacity = newValue ? 1 : 0.25;
             
             FadeTransition fade = new FadeTransition(Duration.millis(300), sun);
