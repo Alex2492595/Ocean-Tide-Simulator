@@ -4,16 +4,10 @@
  */
 package Controller;
 
-import Model.PlanetaryData;
 import Model.TideModel;
 import java.net.URL;
 import java.util.ResourceBundle;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -23,7 +17,6 @@ public class SimulationControllerTest {
     
     public SimulationControllerTest() {
     }
-    
 
     /**
      * Test of initialize method, of class SimulationController.
@@ -35,7 +28,6 @@ public class SimulationControllerTest {
         ResourceBundle rb = null;
         SimulationController instance = new SimulationController();
         instance.initialize(url, rb);
-        
     }
 
     /**
@@ -45,11 +37,5 @@ public class SimulationControllerTest {
     public void testSetModel() {
         System.out.println("setModel");
         TideModel model = null;
-        
-        
     }
-    
-    
-    
-    
 }

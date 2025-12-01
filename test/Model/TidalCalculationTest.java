@@ -4,80 +4,30 @@
  */
 package Model;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author nelso
+ * @author Nelson Pham
+ * Team Project - OceanTideSimulator
+ * 30/11/2025
  */
 public class TidalCalculationTest {
     
     public TidalCalculationTest() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
-    public void tearDown() {
-    }
-
-    /**
-     * Test of calculateTidalForce method, of class TidalCalculation.
-     */
-    @Test
-    public void testCalculateTidalForce() {
-        System.out.println("calculateTidalForce");
-        TidalCalculation instance = null;
-        double expResult = 0.0;
-        double result = instance.calculateTidalForce();
-        assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    } 
 
     /**
      * Test of calculateTidalHeight method, of class TidalCalculation.
      */
     @Test
-    public void testCalculateTidalHeight() {
+    public void testCalculateTidalHeightZero() {
         System.out.println("calculateTidalHeight");
         TidalCalculation instance = null;
         double expResult = 0.0;
         double result = instance.calculateTidalHeight();
         assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of calculateRuleOfTwelfths method, of class TidalCalculation.
-     */
-    @Test
-    public void testCalculateRuleOfTwelfths() {
-        System.out.println("calculateRuleOfTwelfths");
-        double startHeight = 0.0;
-        double nextHeight = 0.0;
-        int hour = 0;
-        TidalCalculation instance = null;
-        double expResult = 0.0;
-        double result = instance.calculateRuleOfTwelfths(startHeight, nextHeight, hour);
-        assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
