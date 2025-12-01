@@ -5,11 +5,18 @@
 
 package Controller;
 
+import Model.PlanetaryData;
+import Model.TidalCalculation;
 import Model.TideModel;
 import java.net.URL;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
@@ -155,8 +162,10 @@ public class SimulationController implements Initializable {
         sunRotate.setInterpolator(Interpolator.LINEAR);
         sunRotate.setCycleCount(Timeline.INDEFINITE);
         
+        PlanetaryData planetaryData = new PlanetaryData();
+        
         waterRect.setHeight(0);
-        model = new TideModel();  // create a new model here
+        model = new TideModel(planetaryData);  // create a new model here
         setModel(model);         
 
         speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -179,9 +188,12 @@ public class SimulationController implements Initializable {
         model.currentTideProperty().addListener((obs, oldVal, newVal) -> {
             updateWaterLevel(newVal.doubleValue());
         });
+        
         updateGravity();
         updateSpeed();
         updateDistance();
+        updateSunEffect();
+        updateTime();
     }
      
      private void updateWaterLevel(double tideMeters) {
@@ -196,21 +208,68 @@ public class SimulationController implements Initializable {
     }
      
     private void updateGravity() {
-        gravitySlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
-       gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
-    });
+        gravitySlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
+            gravityLbl.setText(String.format("%.2f", gravitySlider.getValue()) + " m/s^2");
+            
+            model.getPlanetaryData().setGravityEarth(gravitySlider.getValue());
+        });
     }
     
     private void updateSpeed() {
-        speedSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
-       simulationSpeedLbl.setText(String.format("%.1f", speedSlider.getValue()) + " x");
-    });
+        speedSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
+            simulationSpeedLbl.setText(String.format("%.1f", speedSlider.getValue()) + " x");
+        });
     }
     
     private void updateDistance() {
-        distanceEarthMoonSlider.valueProperty().addListener((observeable, oldvalue, newvalue) -> {
-       moonDistanceLbl.setText(String.format("%.1f", distanceEarthMoonSlider.getValue()) + " Km");
-    });
+        distanceEarthMoonSlider.valueProperty().addListener((observeable, oldValue, newValue) -> {
+            moonDistanceLbl.setText(String.format("%.1f", distanceEarthMoonSlider.getValue()) + " Km");
+
+            //Updates the tide visually
+            model.getPlanetaryData().setDistanceEarthMoon(distanceEarthMoonSlider.getValue() * 1000);
+            
+            //Updates the moon visually
+            double progress = 0;
+            
+            if (moonRotate.getStatus() == Animation.Status.RUNNING || moonRotate.getStatus() == Animation.Status.PAUSED) {
+                double currentTime = moonRotate.getCurrentTime().toMillis();
+                double totalTime = moonRotate.getCycleDuration().toMillis();
+                
+                progress = currentTime / totalTime;
+            }
+            
+            moonRotate.stop();
+            moonPath.setRadius((newValue.doubleValue() / 384000) * 100);
+            moonRotate.setPath(moonPath);
+            
+            Duration newTime = moonRotate.getCycleDuration().multiply(progress);
+            moonRotate.jumpTo(newTime);
+            moonRotate.play();
+        });
+    }
+    
+    private void updateSunEffect() {
+        sunEffectCB.selectedProperty().addListener((obs, oldValue, newValue) -> {
+            model.getPlanetaryData().setSunEffectOn(newValue);
+            
+            double opacity = newValue ? 1 : 0.25;
+            
+            FadeTransition fade = new FadeTransition(Duration.millis(300), sun);
+            fade.setToValue(opacity);
+            fade.play();
+        });
+    }
+    
+    private void updateTime() {
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> {
+                LocalDateTime now = LocalDateTime.now();
+                dateAndTimeTF.setText(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            })
+        );
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
        
     

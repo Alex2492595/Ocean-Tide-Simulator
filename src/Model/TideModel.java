@@ -14,6 +14,8 @@ import java.time.Instant;
 
 public class TideModel {
 
+    private final PlanetaryData planetaryData;
+    
     private final DoubleProperty currentTide = new SimpleDoubleProperty(0.0);
     private final DoubleProperty simulationTime = new SimpleDoubleProperty(Instant.now().getEpochSecond());
     private final DoubleProperty simulationSpeed = new SimpleDoubleProperty(360000.0); // seconds simulated per real second
@@ -24,7 +26,8 @@ public class TideModel {
 
     private final Timeline timeline;
 
-    public TideModel() {
+    public TideModel(PlanetaryData planetaryData) {
+        this.planetaryData = planetaryData;
         timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick(2)));
         timeline.setCycleCount(Animation.INDEFINITE);
     }
@@ -34,13 +37,20 @@ public class TideModel {
         double simSecondsAdvance = realSeconds * simulationSpeed.get();
         double newSimTime = simulationTime.get() + simSecondsAdvance;
         simulationTime.set(newSimTime);
+        
+        TidalCalculation tidalCalculation = new TidalCalculation(planetaryData);
 
+        double sunFactor = planetaryData.isSunEffectOn() ? 0.45 : 0;
+        
+        double totalAmplitude = tidalCalculation.calculateTidalHeight() * (1 + sunFactor);
+        
         double tide = TidalCalculation.computeTide(
                 newSimTime,
-                amplitudeMeters.get(),
+                totalAmplitude,
                 phaseOffsetRadians.get(),
                 lunarPhaseFactor.get()
         );
+        
         currentTide.set(tide);
     }
 
@@ -63,4 +73,8 @@ public class TideModel {
     public DoubleProperty amplitudeMetersProperty() { return amplitudeMeters; }
     public DoubleProperty phaseOffsetRadiansProperty() { return phaseOffsetRadians; }
     public DoubleProperty lunarPhaseFactorProperty() { return lunarPhaseFactor; }
+    
+    public PlanetaryData getPlanetaryData() {
+        return planetaryData;
+    }
 }

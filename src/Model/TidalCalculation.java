@@ -4,8 +4,6 @@
  */
 package Model;
 
-import Model.PlanetaryData;
-
 /**
  *
  * @author Nelson Pham
@@ -14,12 +12,16 @@ import Model.PlanetaryData;
  */
 public class TidalCalculation {
 private static final int[] TWELFTHS = {0, 1, 2, 3, 3, 2, 1};
-PlanetaryData planetaryData = new PlanetaryData();
+private final PlanetaryData planetaryData;
 int hours;
 double tidalForce;
 double tidalHeight; // in meters
 double maxTidalHeight;// in meters
 double minTidalHeight; // in meters
+
+public TidalCalculation(PlanetaryData planetaryData) {
+    this.planetaryData = planetaryData;
+}
     
 public double calculateTidalForce() {
     tidalForce = (2 * planetaryData.getGRAVITATIONAL_CONSTANT() * planetaryData.getMASS_EARTH() * planetaryData.getMASS_MOON() * planetaryData.getRadiusEarth())/(Math.pow(planetaryData.getDistanceEarthMoon(), 3));
@@ -29,7 +31,7 @@ public double calculateTidalForce() {
 public double calculateTidalHeight() {
     tidalHeight = (planetaryData.getGRAVITATIONAL_CONSTANT() * planetaryData.getMASS_MOON() * Math.pow(planetaryData.getRadiusEarth(), 2))/(planetaryData.getGravityEarth() * (Math.pow(planetaryData.getDistanceEarthMoon(), 3)));
     return tidalHeight;
-  }
+}
      
 public double calculateRuleOfTwelfths(double startHeight, double nextHeight, int hour) {
         
