@@ -52,6 +52,7 @@ public class MenuController implements Initializable {
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
             stage.show();
+            stage.centerOnScreen();   
         } catch (IOException ex) {
             Logger.getLogger(MenuController.class.getName()).log(Level.SEVERE, null, ex);
         }
